@@ -55,3 +55,7 @@ output "internet_gateway_id" {
   description = "ID of the Internet Gateway"
   value       = aws_internet_gateway.main.id
 }
+output "alb_dns_name" {
+  description = "DNS name of the Application Load Balancer"
+  value       = aws_lb.app.dns_name
+}
