@@ -1,7 +1,7 @@
 resource "aws_route" "private_nat" {
   # Private route table ko select kar rahe hain.
   # Isi route table se private subnets associated hain.
-  route_table_id = aws_route_table.private.id
+  route_table_id = module.vpc.private_route_table_id
 
   # Private subnet ke resources ko kisi bhi IPv4 Internet
   # destination ke liye ye default route use karna hai.

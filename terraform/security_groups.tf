@@ -8,7 +8,7 @@ resource "aws_security_group" "alb" {
   description = "Security group for Application Load Balancer"
 
   # Security group belongs to our VPC
-  vpc_id = aws_vpc.main.id
+  vpc_id = module.vpc.vpc_id
 
   # Allow HTTP traffic from the internet
   ingress {

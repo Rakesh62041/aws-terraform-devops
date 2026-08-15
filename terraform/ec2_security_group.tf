@@ -1,7 +1,7 @@
 resource "aws_security_group" "ec2" {
   name        = "aws-terraform-devops-ec2-sg"
   description = "Security group for EC2 instances"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = module.vpc.vpc_id
 
   ingress {
     description     = "Allow HTTP traffic from ALB"

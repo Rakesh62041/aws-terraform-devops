@@ -19,10 +19,7 @@ resource "aws_lb" "app" {
 
   # ALB ko 2 public subnets mein place kar rahe hain.
   # Isse ALB multiple Availability Zones mein available rahega.
-  subnets = [
-    aws_subnet.public_1.id,
-    aws_subnet.public_2.id
-  ]
+  subnets = module.vpc.public_subnet_ids
 
   # AWS Console mein ALB ko easily identify karne ke liye tags.
   tags = {

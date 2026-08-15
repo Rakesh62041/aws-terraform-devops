@@ -7,58 +7,58 @@ output "bucket_arn" {
   description = "ARN of the S3 bucket"
   value       = aws_s3_bucket.project_bucket.arn
 }
+
 output "vpc_id" {
   description = "ID of the VPC"
-  value       = aws_vpc.main.id
+  value       = module.vpc.vpc_id
 }
 
 output "vpc_cidr" {
   description = "CIDR block of the VPC"
-  value       = aws_vpc.main.cidr_block
+  value       = var.vpc_cidr
 }
+
 output "availability_zones" {
   description = "Available Availability Zones"
   value       = data.aws_availability_zones.available.names
 }
+
 output "public_subnet_ids" {
   description = "IDs of public subnets"
-  value = [
-    aws_subnet.public_1.id,
-    aws_subnet.public_2.id
-  ]
+  value       = module.vpc.public_subnet_ids
 }
 
 output "private_subnet_ids" {
   description = "IDs of private subnets"
-  value = [
-    aws_subnet.private_1.id,
-    aws_subnet.private_2.id
-  ]
+  value       = module.vpc.private_subnet_ids
 }
 
 output "public_subnet_cidrs" {
   description = "CIDR blocks of public subnets"
   value = [
-    aws_subnet.public_1.cidr_block,
-    aws_subnet.public_2.cidr_block
+    "10.0.1.0/24",
+    "10.0.2.0/24"
   ]
 }
 
 output "private_subnet_cidrs" {
   description = "CIDR blocks of private subnets"
   value = [
-    aws_subnet.private_1.cidr_block,
-    aws_subnet.private_2.cidr_block
+    "10.0.11.0/24",
+    "10.0.12.0/24"
   ]
 }
+
 output "internet_gateway_id" {
   description = "ID of the Internet Gateway"
-  value       = aws_internet_gateway.main.id
+  value       = module.vpc.internet_gateway_id
 }
+
 output "alb_dns_name" {
   description = "DNS name of the Application Load Balancer"
   value       = aws_lb.app.dns_name
 }
+
 output "ec2_instance_id" {
   description = "ID of the application EC2 instance"
   value       = aws_instance.app.id

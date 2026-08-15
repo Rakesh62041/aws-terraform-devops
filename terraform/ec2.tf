@@ -30,7 +30,7 @@ resource "aws_instance" "app" {
   ami           = data.aws_ami.amazon_linux.id
   instance_type = "t3.micro"
 
-  subnet_id = aws_subnet.private_1.id
+  subnet_id = module.vpc.private_subnet_ids[0]
 
   vpc_security_group_ids = [
     aws_security_group.ec2.id
