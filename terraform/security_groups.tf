@@ -2,7 +2,7 @@
 resource "aws_security_group" "alb" {
 
   # Name shown in AWS Console
-  name = "aws-terraform-devops-alb-sg"
+  name = "aws-terraform-devops-${var.environment}-alb-sg"
 
   # Description of this security group
   description = "Security group for Application Load Balancer"
@@ -54,6 +54,6 @@ resource "aws_security_group" "alb" {
 
   # Tags for identification
   tags = {
-    Name = "aws-terraform-devops-alb-sg"
+    Name = "aws-terraform-devops-${var.environment}-alb-sg"
   }
 }

@@ -5,7 +5,7 @@
 resource "aws_lb" "app" {
   # "application" means we are creating an Application
   # Load Balancer instead of Network Load Balancer.
-  name = "aws-terraform-devops-alb"
+  name = "aws-terraform-devops-${var.environment}-alb"
 
   # ALB internet se traffic receive karega.
   # Therefore it must be internet-facing.
@@ -23,6 +23,6 @@ resource "aws_lb" "app" {
 
   # AWS Console mein ALB ko easily identify karne ke liye tags.
   tags = {
-    Name = "aws-terraform-devops-alb"
+    Name = "aws-terraform-devops-${var.environment}-alb"
   }
 }

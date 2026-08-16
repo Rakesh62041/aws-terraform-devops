@@ -1,5 +1,5 @@
 resource "aws_lb_target_group" "app" {
-  name     = "aws-terraform-devops-tg"
+  name     = "aws-terraform-devops-${var.environment}-tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = module.vpc.vpc_id
@@ -16,6 +16,6 @@ resource "aws_lb_target_group" "app" {
   }
 
   tags = {
-    Name = "aws-terraform-devops-target-group"
+    Name = "aws-terraform-devops-${var.environment}-target-group"
   }
 }
