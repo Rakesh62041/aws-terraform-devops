@@ -14,14 +14,21 @@ pipeline {
             }
         }
 
-        stage('Terraform Init') {
-            steps {
-                sh '''
-                    cd terraform
-                    terraform init -reconfigure -input=false
-                '''
-            }
-        }
+      stage('Terraform Init') {
+    steps {
+        sh '''
+            cd terraform
+
+            terraform init -reconfigure -input=false
+
+            echo "===== TERRAFORM WORKSPACE ====="
+            terraform workspace select staging
+
+            echo "Selected workspace:"
+            terraform workspace show
+        '''
+    }
+}
 
       stage('Jenkins Environment Verification') {
     steps {
