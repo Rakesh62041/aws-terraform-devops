@@ -16,3 +16,6 @@ override.tf.json
 *_override.tf.json
 
 !terraform/staging.tfvars
+tfplan
+terraform/tfplan
+.terraform/

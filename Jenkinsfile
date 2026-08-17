@@ -1,10 +1,16 @@
 pipeline {
     agent any
 
+    options {
+        skipDefaultCheckout(true)
+    }
+
     stages {
 
         stage('Checkout') {
             steps {
+                deleteDir()
+
                 checkout scm
             }
         }
@@ -13,7 +19,10 @@ pipeline {
             steps {
                 sh '''
                     cd terraform
-                    terraform init -input=false
+
+                    terraform init \
+                      -reconfigure \
+                      -input=false
                 '''
             }
         }
@@ -40,6 +49,9 @@ pipeline {
             steps {
                 sh '''
                     cd terraform
+
+                    rm -f tfplan
+
                     terraform plan \
                       -input=false \
                       -var-file=staging.tfvars \
@@ -50,8 +62,10 @@ pipeline {
 
         stage('Manual Approval') {
             steps {
-                input message: 'Terraform plan reviewed. Apply changes?', 
-                      ok: 'Apply Terraform'
+                input(
+                    message: 'Terraform plan reviewed. Apply changes?',
+                    ok: 'Apply Terraform'
+                )
             }
         }
 
@@ -59,6 +73,7 @@ pipeline {
             steps {
                 sh '''
                     cd terraform
+
                     terraform apply \
                       -input=false \
                       -auto-approve \
