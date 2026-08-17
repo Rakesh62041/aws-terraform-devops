@@ -10,7 +10,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 deleteDir()
-
                 checkout scm
             }
         }
@@ -19,31 +18,44 @@ pipeline {
             steps {
                 sh '''
                     cd terraform
-
-                    terraform init \
-                      -reconfigure \
-                      -input=false
+                    terraform init -reconfigure -input=false
                 '''
             }
         }
 
-        stage('Verify Terraform Backend') {
+      stage('Jenkins Environment Verification') {
     steps {
         sh '''
+            echo "===== JENKINS WORKSPACE ====="
+            pwd
+
+            echo "===== GIT COMMIT ====="
+            git rev-parse HEAD
+
+            echo "===== GIT BRANCH ====="
+            git branch --show-current
+
+            echo "===== BACKEND ====="
+            cat terraform/backend.tf
+
+            echo "===== TFVARS ====="
+            cat terraform/staging.tfvars
+
+            echo "===== STATE LIST ====="
             cd terraform
-
-            echo "===== BACKEND CONFIG ====="
-            cat backend.tf
-
-            echo "===== TERRAFORM STATE ====="
             terraform state list
 
-            echo "===== ALB SG STATE ====="
+            echo "===== STATE: ALB SG ====="
             terraform state show aws_security_group.alb || true
+
+            echo "===== STATE: IAM ROLE ====="
+            terraform state show aws_iam_role.ec2_role || true
+
+            echo "===== STATE: S3 ====="
+            terraform state show aws_s3_bucket.project_bucket || true
         '''
     }
 }
-
 
         stage('Terraform Fmt') {
             steps {
