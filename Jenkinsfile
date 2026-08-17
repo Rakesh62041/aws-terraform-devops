@@ -97,14 +97,6 @@ pipeline {
             }
         }
 
-        stage('Manual Approval') {
-            steps {
-                input(
-                    message: 'Terraform plan reviewed. Apply changes?',
-                    ok: 'Apply Terraform'
-                )
-            }
-        }
 
         stage('Terraform Apply') {
             steps {
