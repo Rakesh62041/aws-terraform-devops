@@ -11,37 +11,38 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                sh '''
-                    cd terraform
-                    terraform init -input=false
-                '''
+                sh 'cd terraform && terraform init -input=false'
             }
         }
 
         stage('Terraform Format') {
             steps {
-                sh '''
-                    cd terraform
-                    terraform fmt -check
-                '''
+                sh 'cd terraform && terraform fmt -check'
             }
         }
 
         stage('Terraform Validate') {
             steps {
-                sh '''
-                    cd terraform
-                    terraform validate
-                '''
+                sh 'cd terraform && terraform validate'
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                sh '''
-                    cd terraform
-                    terraform plan -input=false -var-file="staging.tfvars"
-                '''
+                sh 'cd terraform && terraform plan -input=false -var-file="staging.tfvars"'
+            }
+        }
+
+        stage('Manual Approval') {
+            steps {
+                input message: 'Do you want to apply the Terraform changes?', 
+                      ok: 'Apply'
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                sh 'cd terraform && terraform apply -input=false -auto-approve -var-file="staging.tfvars"'
             }
         }
     }
