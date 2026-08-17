@@ -11,25 +11,40 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                sh 'cd terraform && terraform init -input=false'
+                sh '''
+                    cd terraform
+                    terraform init -input=false
+                '''
             }
         }
 
-        stage('Terraform Format') {
+        stage('Terraform Fmt') {
             steps {
-                sh 'cd terraform && terraform fmt -check'
+                sh '''
+                    cd terraform
+                    terraform fmt -check -recursive
+                '''
             }
         }
 
         stage('Terraform Validate') {
             steps {
-                sh 'cd terraform && terraform validate'
+                sh '''
+                    cd terraform
+                    terraform validate
+                '''
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                sh 'cd terraform && terraform plan -input=false -var-file="staging.tfvars"'
+                sh '''
+                    cd terraform
+                    terraform plan \
+                      -input=false \
+                      -var-file=staging.tfvars \
+                      -out=tfplan
+                '''
             }
         }
 
@@ -42,7 +57,13 @@ pipeline {
 
         stage('Terraform Apply') {
             steps {
-                sh 'cd terraform && terraform apply -input=false -auto-approve -var-file="staging.tfvars"'
+                sh '''
+                    cd terraform
+                    terraform apply \
+                      -input=false \
+                      -auto-approve \
+                      tfplan
+                '''
             }
         }
     }
