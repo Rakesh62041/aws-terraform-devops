@@ -8,6 +8,12 @@ pipeline {
             }
         }
 
+        stage('Terraform Init') {
+            steps {
+                sh 'cd terraform && terraform init -input=false'
+            }
+        }
+
         stage('Terraform Format') {
             steps {
                 sh 'cd terraform && terraform fmt -check'
@@ -22,7 +28,7 @@ pipeline {
 
         stage('Terraform Plan') {
             steps {
-                sh 'cd terraform && terraform plan -var-file="staging.tfvars"'
+                sh 'cd terraform && terraform plan -input=false -var-file="staging.tfvars"'
             }
         }
     }
