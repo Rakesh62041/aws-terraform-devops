@@ -35,8 +35,8 @@ pipeline {
 
         stage('Manual Approval') {
             steps {
-                input message: 'Do you want to apply the Terraform changes?', 
-                      ok: 'Apply'
+                input message: 'Terraform plan reviewed. Apply changes?', 
+                      ok: 'Apply Terraform'
             }
         }
 
