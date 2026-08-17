@@ -39,12 +39,26 @@ resource "aws_instance" "app" {
 
   user_data = <<-EOF
               #!/bin/bash
-              dnf update -y
-              dnf install -y nginx
-              systemctl enable nginx
-              systemctl start nginx
 
-              echo "<h1>Hello from Terraform EC2</h1>" > /usr/share/nginx/html/index.html
+              dnf update -y
+
+              # Install Docker
+              dnf install -y docker
+
+              # Start Docker automatically
+              systemctl enable --now docker
+
+              # Add ec2-user to docker group
+              usermod -aG docker ec2-user
+
+              # Install nginx
+              dnf install -y nginx
+
+              # Start nginx
+              systemctl enable --now nginx
+
+              # Custom webpage
+              echo "<h1>Hello from Terraform - Docker Ready EC2</h1>" > /usr/share/nginx/html/index.html
               EOF
 
   tags = {
