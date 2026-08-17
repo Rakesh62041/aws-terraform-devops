@@ -27,6 +27,24 @@ pipeline {
             }
         }
 
+        stage('Verify Terraform Backend') {
+    steps {
+        sh '''
+            cd terraform
+
+            echo "===== BACKEND CONFIG ====="
+            cat backend.tf
+
+            echo "===== TERRAFORM STATE ====="
+            terraform state list
+
+            echo "===== ALB SG STATE ====="
+            terraform state show aws_security_group.alb || true
+        '''
+    }
+}
+
+
         stage('Terraform Fmt') {
             steps {
                 sh '''
