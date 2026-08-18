@@ -9,8 +9,8 @@ on:
       - main
 
 permissions:
-  contents: read
   id-token: write
+  contents: read
 
 jobs:
   terraform:
@@ -35,9 +35,6 @@ jobs:
           role-to-assume: arn:aws:iam::922156665774:role/github-actions-terraform-role
           aws-region: us-east-1
 
-      - name: Verify AWS Identity
-        run: aws sts get-caller-identity
-
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
 
@@ -54,3 +51,38 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan -input=false -var-file=staging.tfvars
+
+  terraform-apply:
+    name: Terraform Apply
+    needs: terraform
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::922156665774:role/github-actions-terraform-role
+          aws-region: us-east-1
+
+      - name: Terraform Init
+        run: terraform init -reconfigure -input=false
+
+      - name: Select Terraform Workspace
+        run: |
+          terraform workspace select staging || terraform workspace new staging
+
+      - name: Terraform Apply
+        run: terraform apply -input=false -auto-approve -var-file=staging.tfvars
