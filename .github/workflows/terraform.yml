@@ -71,18 +71,18 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-       - name: Debug OIDC
-  uses: actions/github-script@v7
-  with:
-    script: |
-      const token = await core.getIDToken('sts.amazonaws.com');
-      const payload = JSON.parse(
-        Buffer.from(token.split('.')[1], 'base64url').toString()
-      );
-      console.log("OIDC subject:", payload.sub);
-      console.log("Repository:", payload.repository);
-      console.log("Repository ID:", payload.repository_id);
-      console.log("Environment:", payload.environment)      
+      - name: Debug OIDC
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const token = await core.getIDToken('sts.amazonaws.com');
+            const payload = JSON.parse(
+              Buffer.from(token.split('.')[1], 'base64url').toString()
+            );
+            console.log("OIDC subject:", payload.sub);
+            console.log("Repository:", payload.repository);
+            console.log("Repository ID:", payload.repository_id);
+            console.log("Environment:", payload.environment);
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
