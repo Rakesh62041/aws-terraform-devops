@@ -94,30 +94,74 @@ atlantis.yaml enables Terraform plan/apply directly from GitHub pull request com
 ## 🖼️ Project Walkthrough (Screenshots)
 
 ### Phase 1 — Terraform Foundation
+Terraform installed and configured, with provider setup and initial workflow (`init`, `plan`, `apply`) verified successfully.
+
 ![Terraform Foundation Verification](docs/docs/screenshots/p1-terraform-foundation-verification.png.png)
+
+The core Terraform commands executed end-to-end — plan generated and applied without errors, confirming the foundation setup works correctly.
+
 ![Terraform Plan & Apply](docs/docs/screenshots/p1-terraform-plan-apply.png.png)
 
+---
+
 ### Phase 2 — AWS Infrastructure
+Complete VPC setup with public/private subnets, route tables, and internet gateway — visualized here via the AWS VPC resource map.
+
 ![VPC Resource Map](docs/docs/screenshots/P2_VPC_Resource_Map.png.png)
+
+NAT Gateway provisioned to allow private subnet instances outbound internet access without exposing them publicly.
+
 ![NAT Gateway](docs/docs/screenshots/P2_NAT_Gateway.png.png)
+
+IAM Role attached to the EC2 instance, following least-privilege principles for secure access to AWS services.
+
 ![EC2 IAM Role](docs/docs/screenshots/P2_EC2_IAM_Role.png.png)
+
+Application Load Balancer target group showing healthy EC2 instances — confirming the ALB health checks and routing are working correctly.
+
 ![ALB Target Healthy](docs/docs/screenshots/P2_ALB_Target_Healthy.png.png)
 
+---
+
 ### Phase 3 — Terraform Advanced
+Final `terraform plan` output showing **no changes** — infrastructure state fully matches the code, confirming a clean and drift-free deployment.
+
 ![Final Terraform Plan - No Changes](docs/docs/screenshots/P3_Final_Terraform_Plan_NoChanges.png.png)
 
+---
+
 ### Phase 4 — Modules
+Infrastructure refactored into reusable Terraform modules (VPC, EC2, Security Group, ALB) — plan output confirms modules validate and integrate correctly with the root configuration.
+
 ![Module Validation Plan](docs/docs/screenshots/P4_Module_Validation_Plan.png.png)
 
+---
+
 ### Phase 5 — Terraform State
+Remote state backend configured using S3, enabling secure, centralized, and team-shareable state management (with state locking).
+
 ![Terraform State S3 Backend](docs/docs/screenshots/P5_Terraform_State_S3_Backend.png.png)
 
+---
+
 ### Phase 6 — Environments
+Environment-specific configuration validated — user data scripts and state applied correctly across different `.tfvars` environment setups (dev/staging/prod).
+
 ![Terraform Validation & User Data State](docs/docs/screenshots/P6_Terraform_Validation_UserData_State.png.png)
 
+---
+
 ### Phase 7 — DevOps (CI/CD, Security, PR Automation)
+Jenkins pipeline automating the full Terraform workflow — fmt → validate → plan → manual approval → apply — running successfully end-to-end.
+
 ![Jenkins Terraform Pipeline](docs/docs/screenshots/P7-Jenkins-Terraform-Pipeline.png.png)
+
+GitHub Actions workflow with integrated Checkov security scanning — catching misconfigurations automatically before infrastructure changes are applied.
+
 ![GitHub Actions Checkov](docs/docs/screenshots/P7-GitHub-Actions-Checkov.png.png)
+
+Atlantis enabling PR-based infrastructure automation — Terraform plan/apply triggered directly from pull request comments for a fully reviewed GitOps workflow.
+
 ![Atlantis PR Automation](docs/docs/screenshots/P7-Atlantis-PR-Automation.png.png)
 
 ## 🛠️ Tech Stack
