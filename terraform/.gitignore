@@ -1,0 +1,12 @@
+
+# Checkov
+checkov-report.txt
+
+# Terraform plan files
+*.tfplan
+
+# Local state backup files
+dev-state.json
+*.tfvars
+checkov-final.txt
+checkov-report.txt

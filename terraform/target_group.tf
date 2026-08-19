@@ -1,4 +1,6 @@
 resource "aws_lb_target_group" "app" {
+  #checkov:skip=CKV_AWS_378:HTTP is intentional for ALB-to-private-EC2 communication
+
   name     = "aws-terraform-devops-${var.environment}-tg"
   port     = 80
   protocol = "HTTP"

@@ -1,5 +1,6 @@
 # Security Group for the Application Load Balancer
 resource "aws_security_group" "alb" {
+  #checkov:skip=CKV_AWS_260:HTTP port 80 is intentionally exposed for current ALB project scope
 
   # Name shown in AWS Console
   name = "aws-terraform-devops-${var.environment}-alb-sg"
@@ -40,15 +41,23 @@ resource "aws_security_group" "alb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Allow outbound traffic
+  # Allow outbound HTTP
   egress {
-    description = "Allow all outbound traffic"
+    description = "Allow outbound HTTP"
 
-    protocol = "-1"
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-    from_port = 0
-    to_port   = 0
+  # Allow outbound HTTPS
+  egress {
+    description = "Allow outbound HTTPS"
 
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
     cidr_blocks = ["0.0.0.0/0"]
   }
 

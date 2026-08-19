@@ -30,12 +30,26 @@ resource "aws_instance" "app" {
   ami           = data.aws_ami.amazon_linux.id
   instance_type = "t3.micro"
 
+  monitoring    = true
+  ebs_optimized = true
+
   subnet_id = module.vpc.private_subnet_ids[0]
 
   vpc_security_group_ids = [
     aws_security_group.ec2.id
   ]
+
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
+
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+
+  root_block_device {
+    encrypted   = true
+    volume_type = "gp3"
+  }
 
   user_data = <<-EOF
               #!/bin/bash

@@ -1,27 +1,20 @@
-# ============================================================
-# APPLICATION LOAD BALANCER
-# ============================================================
-
 resource "aws_lb" "app" {
-  # "application" means we are creating an Application
-  # Load Balancer instead of Network Load Balancer.
-  name = "aws-terraform-devops-${var.environment}-alb"
+  #checkov:skip=CKV_AWS_91:ALB access logging not required in current project
+  #checkov:skip=CKV_AWS_150:Deletion protection disabled to allow Terraform destroy
+  #checkov:skip=CKV2_AWS_20:HTTPS redirect requires ACM certificate and domain
+  #checkov:skip=CKV2_AWS_28:WAF not included in current project scope
 
-  # ALB internet se traffic receive karega.
-  # Therefore it must be internet-facing.
-  internal = false
-
-  # ALB ka type Application Load Balancer hai.
+  name               = "aws-terraform-devops-${var.environment}-alb"
+  internal           = false
   load_balancer_type = "application"
 
-  # ALB ko hamare existing ALB Security Group se protect karenge.
+  drop_invalid_header_fields = true
+
   security_groups = [aws_security_group.alb.id]
+  subnets         = module.vpc.public_subnet_ids
 
-  # ALB ko 2 public subnets mein place kar rahe hain.
-  # Isse ALB multiple Availability Zones mein available rahega.
-  subnets = module.vpc.public_subnet_ids
+  enable_deletion_protection = false
 
-  # AWS Console mein ALB ko easily identify karne ke liye tags.
   tags = {
     Name = "aws-terraform-devops-${var.environment}-alb"
   }
